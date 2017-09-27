@@ -20,6 +20,18 @@
     <!-- 扫描路径 -->
     <context:component-scan base-package="com.imory.**.controller"/>
 
+    <!-- don't handle the static resource -->
+    <mvc:default-servlet-handler />
+
+    <!-- if you use annotation you must configure following setting -->
+    <!-- 激活基于注解的配置 @RequestMapping, @ExceptionHandler,数据绑定 ,@NumberFormat ,
+    @DateTimeFormat ,@Controller ,@Valid ,@RequestBody ,@ResponseBody等  -->
+    <mvc:annotation-driven/>
+
+    <mvc:interceptors>
+        <bean id="authorizeInterceptor" class="com.imory.interceptor.ControllerLogIntercept"/>
+    </mvc:interceptors>
+
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"/>
 
     <!-- 数据源配置 -->
@@ -32,17 +44,10 @@
         </property>
     </bean>
 
-    <mvc:interceptors>
-        <bean id="authorizeInterceptor" class="com.imory.interceptor.ControllerLogIntercept"/>
-    </mvc:interceptors>
-
     <bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="location" value="classpath:dbconfig.properties"/>
     </bean>
 
-    <!-- 激活基于注解的配置 @RequestMapping, @ExceptionHandler,数据绑定 ,@NumberFormat ,
-    @DateTimeFormat ,@Controller ,@Valid ,@RequestBody ,@ResponseBody等  -->
-    <mvc:annotation-driven/>
 
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
         <property name="driverClassName" value="${jdbc.Driver}"/>
@@ -89,7 +94,7 @@
 
     <!-- 数据库映射接口扫描 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.moli.*.*.dao"/>
+        <property name="basePackage" value="com.imory.*.*.dao"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </bean>
 
